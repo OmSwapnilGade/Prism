@@ -8,6 +8,7 @@ import { HomePage } from "@/pages/HomePage";
 import { DocsIndexPage } from "@/pages/DocsIndexPage";
 import { ComponentDocPage } from "@/pages/ComponentDocPage";
 import { PlaygroundPage } from "@/pages/PlaygroundPage";
+import { StudioPage } from "@/pages/StudioPage";
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -36,6 +37,16 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <PlaygroundPage />,
+      },
+    ],
+  },
+  {
+    path: "/studio",
+    element: <DocsLayout />,
+    children: [
+      {
+        index: true,
+        element: <StudioPage />,
       },
     ],
   },

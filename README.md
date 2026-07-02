@@ -7,6 +7,7 @@
 ##  Features
 
 - **Theme Roulette:** A slot-machine style feature that instantly morphs the entire application's visual personality with a single click. Showcases true decoupling of component structure and CSS tokens.
+- **Prism Studio (New!):** A visual, no-code customizer built directly on top of the component schema. Pick components, tweak their variants through an auto-generated UI, preview live, and export the generated JSX.
 - **Command Palette (`Cmd+K`):** A fully keyboard-accessible, fuzzy-searchable global command palette to instantly navigate between components and themes.
 - **Interactive Playground:** A dedicated sandbox route to stress-test form components, feedback dialogs, and interactive elements in real-time under different themes.
 - **Cinematic Intro Splash:** A beautiful, Framer Motion-powered light refraction SVG animation that sets a premium tone on the first load.
