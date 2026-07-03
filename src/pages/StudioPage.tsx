@@ -7,7 +7,7 @@
  *   Right:  Prop editor (context-sensitive to selected node)
  */
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
   DndContext,
@@ -31,6 +31,8 @@ import { getStudioSchema } from "@/studio/studioRegistry";
 import { generatePageCode } from "@/studio/generatePageJsx";
 import { isContainer, type CanvasNode } from "@/studio/canvasTypes";
 import type { StudioComponentSchema } from "@/studio/studioRegistry";
+import { useTheme } from "@/hooks/useTheme";
+import { downloadProject } from "@/studio/export/downloadProject";
 
 // ── Draggable picker item ───────────────────────────────────────────────
 
@@ -127,9 +129,21 @@ const groupOrder = ["actions", "forms", "layout", "feedback"];
 
 export function StudioPage() {
   const canvas = useCanvasState();
+  const { theme } = useTheme();
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
   const [leftTab, setLeftTab] = useState<"components" | "tree">("components");
   const [showCode, setShowCode] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+
+  const handleExport = useCallback(async () => {
+    if (isExporting || canvas.nodes.length === 0) return;
+    setIsExporting(true);
+    try {
+      await downloadProject(canvas.nodes, theme);
+    } finally {
+      setIsExporting(false);
+    }
+  }, [canvas.nodes, theme, isExporting]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
@@ -255,12 +269,49 @@ export function StudioPage() {
                     ? "bg-primary text-primary-foreground border-primary"
                     : "bg-secondary/50 text-muted-foreground border-border hover:text-foreground"
                 )}
+                id="studio-toggle-code"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
                 </svg>
                 Code
               </button>
+
+              {/* Export button */}
+              <button
+                onClick={handleExport}
+                disabled={canvas.nodes.length === 0 || isExporting}
+                id="studio-export-project"
+                title={canvas.nodes.length === 0 ? "Add components to export" : `Export as runnable project (${theme} theme)`}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium",
+                  "rounded-[var(--prism-radius-md)]",
+                  "border transition-all duration-[var(--prism-duration)]",
+                  "focus-ring",
+                  canvas.nodes.length === 0 || isExporting
+                    ? "opacity-40 cursor-not-allowed border-border text-muted-foreground"
+                    : "cursor-pointer bg-secondary/50 text-muted-foreground border-border hover:text-foreground hover:bg-accent hover:border-border/80"
+                )}
+              >
+                {isExporting ? (
+                  <>
+                    <svg className="animate-spin" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                    </svg>
+                    Exporting…
+                  </>
+                ) : (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    Export
+                  </>
+                )}
+              </button>
+
               {canvas.nodes.length > 0 && (
                 <button
                   onClick={canvas.clearCanvas}

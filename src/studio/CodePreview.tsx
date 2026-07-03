@@ -13,7 +13,7 @@ import type { StudioComponentSchema } from "./studioRegistry";
 
 interface CodePreviewProps {
   code: string;
-  schema: StudioComponentSchema | null;
+  schema?: StudioComponentSchema | null;
 }
 
 /** Build the import statement for the generated code */
@@ -26,18 +26,18 @@ export function CodePreview({ code, schema }: CodePreviewProps) {
   const { theme } = useTheme();
   const { copied, copyToClipboard } = useCopyToClipboard();
 
-  if (!schema || !code) {
+  if (!code) {
     return (
       <div className="flex items-center justify-center h-full">
         <p className="text-sm text-muted-foreground">
-          Select a component to see generated code
+          Add components to the canvas to see generated code
         </p>
       </div>
     );
   }
 
-  const importLine = buildImportLine(schema);
-  const fullCode = `${importLine}\n\n${code}`;
+  const importLine = schema ? buildImportLine(schema) : "";
+  const fullCode = schema ? `${importLine}\n\n${code}` : code;
 
   const prismTheme = theme === "light" ? themes.nightOwlLight : themes.nightOwl;
 
