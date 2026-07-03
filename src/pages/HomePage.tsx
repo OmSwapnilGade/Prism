@@ -114,6 +114,24 @@ export function HomePage() {
 
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <Link
+                to="/studio"
+                className={cn(
+                  "inline-flex items-center justify-center gap-2",
+                  "h-12 px-8 text-base font-semibold",
+                  "bg-gradient-to-r from-[#818cf8] via-[#c084fc] to-[#f472b6]",
+                  "text-white shadow-md hover:shadow-lg hover:opacity-90",
+                  "rounded-[var(--prism-radius-lg)]",
+                  "transition-all duration-[var(--prism-duration)]",
+                  "focus-ring"
+                )}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                  <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
+                </svg>
+                Open Studio
+              </Link>
+              <Link
                 to="/docs/button"
                 className={cn(
                   "inline-flex items-center justify-center gap-2",
@@ -147,7 +165,7 @@ export function HomePage() {
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
                 </svg>
-                Try Playground
+                Playground
               </Link>
             </div>
           </motion.div>
